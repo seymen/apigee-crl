@@ -1,0 +1,4 @@
+<JavaCallout name="Java.CrlDistributionPointResolver">
+  <ClassName>com.exco.CrlDistributionPointResolver</ClassName>
+  <ResourceURL>java://java-1.0-SNAPSHOT.jar</ResourceURL>
+</JavaCallout>

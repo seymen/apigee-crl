@@ -7,49 +7,35 @@ import com.apigee.flow.message.MessageContext;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.ByteArrayInputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.cert.CRLException;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
-import java.security.cert.X509CRL;
-import java.security.cert.X509CRLEntry;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.bouncycastle.asn1.ASN1InputStream;
 import org.bouncycastle.asn1.ASN1Primitive;
-import org.bouncycastle.asn1.DERIA5String;
 import org.bouncycastle.asn1.DEROctetString;
+import org.bouncycastle.asn1.x509.Extension;
+import org.bouncycastle.asn1.DERIA5String;
 import org.bouncycastle.asn1.x509.CRLDistPoint;
 import org.bouncycastle.asn1.x509.DistributionPoint;
 import org.bouncycastle.asn1.x509.DistributionPointName;
-import org.bouncycastle.asn1.x509.Extension;
 import org.bouncycastle.asn1.x509.GeneralName;
 import org.bouncycastle.asn1.x509.GeneralNames;
 
-public class App implements Execution
-{
+public class CrlDistributionPointResolver implements Execution {
+
   public ExecutionResult execute(MessageContext messageContext, ExecutionContext executionContext) {
     try {
       String pem = messageContext.getVariable("request.content");
       X509Certificate certificate = pemToCertificate(pem);
-
       String crlDistributionPoint = getCrlDistributionPoint(certificate);
+
       messageContext.setVariable("flow.exco.crlDistributionPoint", crlDistributionPoint);
-
-      byte[] crlDer = messageContext.getVariable("flow.exco.crlDerFromCache");
-      X509CRL crl = getCrl(crlDistributionPoint, crlDer, messageContext);
-      messageContext.setVariable("flow.exco.revokedCertSize", crl.getRevokedCertificates().size());
-      messageContext.setVariable("flow.exco.crlDer", crl.getEncoded());
-
-      boolean res = isCertRevoked(certificate, crl);
-      messageContext.setVariable("flow.exco.isCertRevoked", res);
 
       return ExecutionResult.SUCCESS;
     } catch (Exception e) {
@@ -58,44 +44,15 @@ public class App implements Execution
     }
   }
 
-  private static X509CRL getCrl(String crlUrl, byte[] crlDer, MessageContext messageContext)
-    throws MalformedURLException, IOException, CertificateException, CRLException {
-    if (crlDer == null) {
-      return downloadCRLFromWeb(crlUrl);
-    } else {
-      messageContext.setVariable("flow.exco.readingFromCache", "true");
-      InputStream crlStream = new ByteArrayInputStream(crlDer);
-      CertificateFactory cf = CertificateFactory.getInstance("X.509");
-      return (X509CRL) cf.generateCRL(crlStream);
-    }
-  }
-
   private static X509Certificate pemToCertificate(String pem) throws CertificateException {
     CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
-    return (X509Certificate) certificateFactory
-          .generateCertificate(new ByteArrayInputStream(pem.getBytes()));
-  }
-
-  private static boolean isCertRevoked(X509Certificate certificate, X509CRL crl) throws CertificateException{
-    return crl.isRevoked(certificate);
-  }
-
-  private static X509CRL downloadCRLFromWeb(String crlURL)
-      throws MalformedURLException, IOException, CertificateException, CRLException {
-    URL url = new URL(crlURL);
-    InputStream crlStream = url.openStream();
-    try {
-      CertificateFactory cf = CertificateFactory.getInstance("X.509");
-      return (X509CRL) cf.generateCRL(crlStream);
-    } finally {
-      crlStream.close();
-    }
+    return (X509Certificate) certificateFactory.generateCertificate(new ByteArrayInputStream(pem.getBytes()));
   }
 
   public static String getCrlDistributionPoint(X509Certificate certificate) {
     try {
       byte[] crlDistributionPointDerEncodedArray = certificate
-          .getExtensionValue(Extension.cRLDistributionPoints.getId());
+        .getExtensionValue(Extension.cRLDistributionPoints.getId());
 
       ASN1InputStream oAsnInStream = new ASN1InputStream(new ByteArrayInputStream(crlDistributionPointDerEncodedArray));
       ASN1Primitive derObjCrlDP = oAsnInStream.readObject();
@@ -137,4 +94,5 @@ public class App implements Execution
       return null;
     }
   }
+
 }
