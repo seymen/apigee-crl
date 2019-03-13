@@ -21,12 +21,25 @@
       <scope>system</scope>
       <systemPath>${project.basedir}/src/main/resources/message-flow-1.0.0.jar</systemPath>
     </dependency>
+
     <dependency>
       <groupId>com.apigee.edge</groupId>
       <artifactId>expressions</artifactId>
       <version>1.0.0</version>
       <scope>system</scope>
       <systemPath>${project.basedir}/src/main/resources/expressions-1.0.0.jar</systemPath>
+    </dependency>
+
+    <dependency>
+        <groupId>org.bouncycastle</groupId>
+        <artifactId>bcprov-jdk15on</artifactId>
+        <version>1.52</version>
+    </dependency>
+
+    <dependency>
+        <groupId>org.bouncycastle</groupId>
+        <artifactId>bcpkix-jdk15on</artifactId>
+        <version>1.52</version>
     </dependency>
   </dependencies>
 
