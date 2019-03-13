@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ProxyEndpoint name="default">
+
+  <PreFlow>
+    <Request>
+      <Step>
+        <Name>Java.HelloWorld</Name>
+      </Step>
+    </Request>
+  </PreFlow>
+
+  <RouteRule name="default">
+    <TargetEndpoint>default</TargetEndpoint>
+  </RouteRule>
+
+  <HTTPProxyConnection>
+    <BasePath>/crl</BasePath>
+    <VirtualHost>default</VirtualHost>
+  </HTTPProxyConnection>
+
+</ProxyEndpoint>
