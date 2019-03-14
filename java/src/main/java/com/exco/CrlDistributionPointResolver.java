@@ -39,17 +39,17 @@ public class CrlDistributionPointResolver implements Execution {
 
       return ExecutionResult.SUCCESS;
     } catch (Exception e) {
-      messageContext.setVariable("flow.java.error", e.getMessage());
+      messageContext.setVariable("flow.java.error", e.toString());
       return ExecutionResult.ABORT;
     }
   }
 
-  private static X509Certificate pemToCertificate(String pem) throws CertificateException {
+  protected static X509Certificate pemToCertificate(String pem) throws CertificateException {
     CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
     return (X509Certificate) certificateFactory.generateCertificate(new ByteArrayInputStream(pem.getBytes()));
   }
 
-  public static String getCrlDistributionPoint(X509Certificate certificate) {
+  protected static String getCrlDistributionPoint(X509Certificate certificate) {
     try {
       byte[] crlDistributionPointDerEncodedArray = certificate
         .getExtensionValue(Extension.cRLDistributionPoints.getId());

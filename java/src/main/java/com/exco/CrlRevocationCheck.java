@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.security.cert.CRLException;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
@@ -23,6 +24,8 @@ public class CrlRevocationCheck implements Execution {
       String pem = messageContext.getVariable("flow.tls.client.pem");
       X509Certificate certificate = pemToCertificate(pem);
 
+      messageContext.setVariable("flow.serialNumber", certificate.getSerialNumber().toString(16));
+
       String crlDistributionPoint = messageContext.getVariable("flow.crlDistributionPoint");
       byte[] crlDer = messageContext.getVariable("flow.internal.crlDerFromCache");
 
@@ -35,12 +38,12 @@ public class CrlRevocationCheck implements Execution {
 
       return ExecutionResult.SUCCESS;
     } catch (Exception e) {
-      messageContext.setVariable("flow.java.error", e.getMessage());
+      messageContext.setVariable("flow.java.error", e.toString());
       return ExecutionResult.ABORT;
     }
   }
 
-  private static X509CRL getCrl(String crlUrl, byte[] crlDer)
+  protected static X509CRL getCrl(String crlUrl, byte[] crlDer)
     throws MalformedURLException, IOException, CertificateException, CRLException {
     if (crlDer == null) {
       return downloadCrl(crlUrl);
@@ -59,7 +62,10 @@ public class CrlRevocationCheck implements Execution {
   private static X509CRL downloadCrl(String crlUrl)
       throws MalformedURLException, IOException, CertificateException, CRLException {
     URL url = new URL(crlUrl);
-    InputStream crlStream = url.openStream();
+    URLConnection con = url.openConnection();
+    con.setConnectTimeout(1000);
+    con.setReadTimeout(2000);
+    InputStream crlStream = con.getInputStream();
 
     try {
       CertificateFactory cf = CertificateFactory.getInstance("X.509");
@@ -69,7 +75,7 @@ public class CrlRevocationCheck implements Execution {
     }
   }
 
-  private static boolean isCertRevoked(X509Certificate certificate, X509CRL crl) throws CertificateException{
+  protected static boolean isCertRevoked(X509Certificate certificate, X509CRL crl) throws CertificateException{
     return crl.isRevoked(certificate);
   }
 
