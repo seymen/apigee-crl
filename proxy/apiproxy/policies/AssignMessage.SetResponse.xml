@@ -1,0 +1,15 @@
+<AssignMessage name="AssignMessage.SetResponse">
+  <Set>
+    <Headers>
+      <Header name="Content-Type">application/json;charset=UTF-8</Header>
+    </Headers>
+    <Payload contentType="application/json">
+{
+  "crlDistributionPoint": "{flow.crlDistributionPoint}",
+  "numberOfRevokedCertificates": {flow.numberOfRevokedCertificates},
+  "isCertificateRevoked": {flow.isCertificateRevoked}
+}
+    </Payload>
+  </Set>
+</AssignMessage>
+

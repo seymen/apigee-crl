@@ -10,11 +10,14 @@
         <Name>FlowCallout.Crl</Name>
       </Step>
     </Request>
+    <Response>
+      <Step>
+        <Name>AssignMessage.SetResponse</Name>
+      </Step>
+    </Response>
   </PreFlow>
 
-  <RouteRule name="default">
-    <TargetEndpoint>default</TargetEndpoint>
-  </RouteRule>
+  <RouteRule name="no-target" />
 
   <HTTPProxyConnection>
     <BasePath>/crl</BasePath>

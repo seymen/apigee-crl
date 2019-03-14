@@ -27,11 +27,11 @@ public class CrlRevocationCheck implements Execution {
       byte[] crlDer = messageContext.getVariable("flow.crlDerFromCache");
 
       X509CRL crl = getCrl(crlDistributionPoint, crlDer);
-      messageContext.setVariable("flow.revokedCertSize", crl.getRevokedCertificates().size());
+      messageContext.setVariable("flow.numberOfRevokedCertificates", crl.getRevokedCertificates().size());
       messageContext.setVariable("flow.crlDer", crl.getEncoded());
 
       boolean res = isCertRevoked(certificate, crl);
-      messageContext.setVariable("flow.isCertRevoked", res);
+      messageContext.setVariable("flow.isCertificateRevoked", res);
 
       return ExecutionResult.SUCCESS;
     } catch (Exception e) {
