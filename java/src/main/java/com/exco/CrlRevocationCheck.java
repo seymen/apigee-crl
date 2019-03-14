@@ -24,11 +24,11 @@ public class CrlRevocationCheck implements Execution {
       X509Certificate certificate = pemToCertificate(pem);
 
       String crlDistributionPoint = messageContext.getVariable("flow.crlDistributionPoint");
-      byte[] crlDer = messageContext.getVariable("flow.crlDerFromCache");
+      byte[] crlDer = messageContext.getVariable("flow.internal.crlDerFromCache");
 
       X509CRL crl = getCrl(crlDistributionPoint, crlDer);
       messageContext.setVariable("flow.numberOfRevokedCertificates", crl.getRevokedCertificates().size());
-      messageContext.setVariable("flow.crlDer", crl.getEncoded());
+      messageContext.setVariable("flow.internal.crlDer", crl.getEncoded());
 
       boolean res = isCertRevoked(certificate, crl);
       messageContext.setVariable("flow.isCertificateRevoked", res);

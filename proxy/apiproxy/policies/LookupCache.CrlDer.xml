@@ -3,5 +3,5 @@
     <KeyFragment ref="flow.crlDistributionPoint"/>
   </CacheKey>
   <CacheResource>CrlCache</CacheResource>
-  <AssignTo>flow.crlDerFromCache</AssignTo>
+  <AssignTo>flow.internal.crlDerFromCache</AssignTo>
 </LookupCache>

@@ -6,5 +6,5 @@
   <ExpirySettings>
     <TimeoutInSec>3600</TimeoutInSec>
   </ExpirySettings>
-  <Source>flow.crlDer</Source>
+  <Source>flow.internal.crlDer</Source>
 </PopulateCache>
