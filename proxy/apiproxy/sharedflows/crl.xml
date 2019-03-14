@@ -1,0 +1,15 @@
+<SharedFlow name="crl">
+  <Step>
+    <Name>Java.CrlDistributionPointResolver</Name>
+  </Step>
+  <Step>
+    <Name>LookupCache.CrlDer</Name>
+  </Step>
+  <Step>
+    <Name>Java.CrlRevocationCheck</Name>
+  </Step>
+  <Step>
+    <Condition>lookupcache.LookupCache.CrlDer.cachehit != true</Condition>
+    <Name>PopulateCache.CrlDer</Name>
+  </Step>
+</SharedFlow>
