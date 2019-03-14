@@ -1,5 +1,9 @@
 <SharedFlow name="crl">
   <Step>
+    <Condition>(flow.tls.client.pem = null)</Condition>
+    <Name>AssignMessage.UseMtlsCertificate</Name>
+  </Step>
+  <Step>
     <Name>Java.CrlDistributionPointResolver</Name>
   </Step>
   <Step>

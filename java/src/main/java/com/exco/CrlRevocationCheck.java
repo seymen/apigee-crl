@@ -20,22 +20,22 @@ public class CrlRevocationCheck implements Execution {
 
   public ExecutionResult execute(MessageContext messageContext, ExecutionContext executionContext) {
     try {
-      String pem = messageContext.getVariable("request.content");
+      String pem = messageContext.getVariable("flow.tls.client.pem");
       X509Certificate certificate = pemToCertificate(pem);
 
-      String crlDistributionPoint = messageContext.getVariable("flow.exco.crlDistributionPoint");
-      byte[] crlDer = messageContext.getVariable("flow.exco.crlDerFromCache");
+      String crlDistributionPoint = messageContext.getVariable("flow.crlDistributionPoint");
+      byte[] crlDer = messageContext.getVariable("flow.crlDerFromCache");
 
       X509CRL crl = getCrl(crlDistributionPoint, crlDer);
-      messageContext.setVariable("flow.exco.revokedCertSize", crl.getRevokedCertificates().size());
-      messageContext.setVariable("flow.exco.crlDer", crl.getEncoded());
+      messageContext.setVariable("flow.revokedCertSize", crl.getRevokedCertificates().size());
+      messageContext.setVariable("flow.crlDer", crl.getEncoded());
 
       boolean res = isCertRevoked(certificate, crl);
-      messageContext.setVariable("flow.exco.isCertRevoked", res);
+      messageContext.setVariable("flow.isCertRevoked", res);
 
       return ExecutionResult.SUCCESS;
     } catch (Exception e) {
-      messageContext.setVariable("flow.exco.java.error", e.getMessage());
+      messageContext.setVariable("flow.java.error", e.getMessage());
       return ExecutionResult.ABORT;
     }
   }

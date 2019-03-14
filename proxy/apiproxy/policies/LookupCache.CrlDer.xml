@@ -1,7 +1,7 @@
 <LookupCache name="LookupCache.CrlDer">
   <CacheKey>
-    <KeyFragment ref="flow.exco.crlDistributionPoint"/>
+    <KeyFragment ref="flow.crlDistributionPoint"/>
   </CacheKey>
   <CacheResource>CrlCache</CacheResource>
-  <AssignTo>flow.exco.crlDerFromCache</AssignTo>
+  <AssignTo>flow.crlDerFromCache</AssignTo>
 </LookupCache>

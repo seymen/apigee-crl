@@ -1,10 +1,10 @@
 <PopulateCache name="PopulateCache.CrlDer">
   <CacheKey>
-    <KeyFragment ref="flow.exco.crlDistributionPoint"/>
+    <KeyFragment ref="flow.crlDistributionPoint"/>
   </CacheKey>
   <CacheResource>CrlCache</CacheResource>
   <ExpirySettings>
     <TimeoutInSec>3600</TimeoutInSec>
   </ExpirySettings>
-  <Source>flow.exco.crlDer</Source>
+  <Source>flow.crlDer</Source>
 </PopulateCache>
