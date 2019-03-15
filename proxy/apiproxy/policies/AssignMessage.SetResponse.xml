@@ -5,10 +5,10 @@
     </Headers>
     <Payload contentType="application/json">
 {
-  "crlDistributionPoint": "{flow.crlDistributionPoint}",
-  "numberOfRevokedCertificates": {flow.numberOfRevokedCertificates},
-  "serialNumber": "{flow.serialNumber}",
-  "isCertificateRevoked": {flow.isCertificateRevoked}
+  "crlDistributionPoint": "{custom.crlDistributionPoint}",
+  "numberOfRevokedCertificates": {custom.numberOfRevokedCertificates},
+  "serialNumber": "{custom.serialNumber}",
+  "isCertificateRevoked": {custom.isCertificateRevoked}
 }
     </Payload>
   </Set>

@@ -1,6 +1,6 @@
 <AssignMessage name="AssignMessage.UseMtlsCertificate">
   <AssignVariable>
-    <Name>flow.tls.client.pem</Name>
+    <Name>custom.tls.client.pem</Name>
     <Ref>tls.client.raw.cert</Ref>
   </AssignVariable>
 </AssignMessage>

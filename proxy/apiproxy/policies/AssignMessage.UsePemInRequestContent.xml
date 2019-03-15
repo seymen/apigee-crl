@@ -1,6 +1,6 @@
 <AssignMessage name="AssignMessage.UsePemInRequestContent">
   <AssignVariable>
-    <Name>flow.tls.client.pem</Name>
+    <Name>custom.tls.client.pem</Name>
     <Ref>request.content</Ref>
   </AssignVariable>
 </AssignMessage>

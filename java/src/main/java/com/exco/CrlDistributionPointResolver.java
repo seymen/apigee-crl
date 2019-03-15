@@ -31,15 +31,15 @@ public class CrlDistributionPointResolver implements Execution {
 
   public ExecutionResult execute(MessageContext messageContext, ExecutionContext executionContext) {
     try {
-      String pem = messageContext.getVariable("flow.tls.client.pem");
+      String pem = messageContext.getVariable("custom.tls.client.pem");
       X509Certificate certificate = pemToCertificate(pem);
       String crlDistributionPoint = getCrlDistributionPoint(certificate);
 
-      messageContext.setVariable("flow.crlDistributionPoint", crlDistributionPoint);
+      messageContext.setVariable("custom.crlDistributionPoint", crlDistributionPoint);
 
       return ExecutionResult.SUCCESS;
     } catch (Exception e) {
-      messageContext.setVariable("flow.java.error", e.toString());
+      messageContext.setVariable("custom.java.error", e.toString());
       return ExecutionResult.ABORT;
     }
   }

@@ -1,7 +1,7 @@
 <LookupCache name="LookupCache.CrlDer">
   <CacheKey>
-    <KeyFragment ref="flow.crlDistributionPoint"/>
+    <KeyFragment ref="custom.crlDistributionPoint"/>
   </CacheKey>
   <CacheResource>CrlCache</CacheResource>
-  <AssignTo>flow.internal.crlDerFromCache</AssignTo>
+  <AssignTo>custom.internal.crlDerFromCache</AssignTo>
 </LookupCache>
