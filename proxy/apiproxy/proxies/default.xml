@@ -1,6 +1,27 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <ProxyEndpoint name="default">
 
+  <FaultRules>
+    <FaultRule name="Java Execution">
+      <Condition>(fault.name = "ExecutionReturnedFailure")</Condition>
+      <Step>
+        <Condition>(custom.error.message != null)</Condition>
+        <Name>AssignMessage.Error.Java</Name>
+      </Step>
+    </FaultRule>
+  </FaultRules>
+
+  <DefaultFaultRule>
+    <AlwaysEnforce>true</AlwaysEnforce>
+    <Step>
+      <Condition>(custom.error.message = null)</Condition>
+      <Name>AssignMessage.Error.Default</Name>
+    </Step>
+    <Step>
+      <Name>RaiseFault.Json</Name>
+    </Step>
+  </DefaultFaultRule>
+
   <PreFlow>
     <Request>
       <Step>

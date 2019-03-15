@@ -1,0 +1,16 @@
+<RaiseFault name="RaiseFault.Json">
+  <FaultResponse>
+    <Set>
+      <Headers>
+        <Header name="Content-Type">application/json;charset=UTF-8</Header>
+      </Headers>
+      <Payload contentType="application/json">
+{
+  "message": "{custom.error.message}"
+}
+      </Payload>
+      <StatusCode>{custom.error.statusCode}</StatusCode>
+    </Set>
+  </FaultResponse>
+  <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+</RaiseFault>

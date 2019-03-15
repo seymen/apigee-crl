@@ -1,0 +1,16 @@
+<AssignMessage name="AssignMessage.Error.Default">
+  <AssignVariable>
+    <Name>custom.error.message</Name>
+    <Value>internal server error</Value>
+  </AssignVariable>
+
+  <AssignVariable>
+    <Name>custom.error.statusCode</Name>
+    <Value>500</Value>
+  </AssignVariable>
+
+  <AssignVariable>
+    <Name>custom.error.reasonPhrase</Name>
+    <Value>Internal Server Error</Value>
+  </AssignVariable>
+</AssignMessage>

@@ -1,4 +1,0 @@
-<JavaCallout name="Java.HelloWorld">
-  <ClassName>com.exco.App</ClassName>
-  <ResourceURL>java://java-1.0-SNAPSHOT.jar</ResourceURL>
-</JavaCallout>

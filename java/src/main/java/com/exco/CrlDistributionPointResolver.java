@@ -38,8 +38,11 @@ public class CrlDistributionPointResolver implements Execution {
       messageContext.setVariable("custom.crlDistributionPoint", crlDistributionPoint);
 
       return ExecutionResult.SUCCESS;
+    } catch (BadRequestException bad) {
+      messageContext.setVariable("custom.error.message", bad.getMessage());
+      return ExecutionResult.ABORT;
     } catch (Exception e) {
-      messageContext.setVariable("custom.java.error", e.toString());
+      messageContext.setVariable("custom.internal.error.message", e.getMessage());
       return ExecutionResult.ABORT;
     }
   }
@@ -49,23 +52,29 @@ public class CrlDistributionPointResolver implements Execution {
     return (X509Certificate) certificateFactory.generateCertificate(new ByteArrayInputStream(pem.getBytes()));
   }
 
-  protected static String getCrlDistributionPoint(X509Certificate certificate) {
+  protected static String getCrlDistributionPoint(X509Certificate certificate)
+    throws IOException, CertificateException, BadRequestException {
+    ASN1InputStream oAsnInStream = null;
+    ASN1InputStream oAsnInStream2 = null;
+
     try {
       byte[] crlDistributionPointDerEncodedArray = certificate
         .getExtensionValue(Extension.cRLDistributionPoints.getId());
 
-      ASN1InputStream oAsnInStream = new ASN1InputStream(new ByteArrayInputStream(crlDistributionPointDerEncodedArray));
+      if (crlDistributionPointDerEncodedArray == null) {
+        throw new BadRequestException("There are no CRL distribution points defined for this certificate");
+      }
+
+      System.out.println("1: " + crlDistributionPointDerEncodedArray);
+
+      oAsnInStream = new ASN1InputStream(new ByteArrayInputStream(crlDistributionPointDerEncodedArray));
       ASN1Primitive derObjCrlDP = oAsnInStream.readObject();
       DEROctetString dosCrlDP = (DEROctetString) derObjCrlDP;
 
-      oAsnInStream.close();
-
       byte[] crldpExtOctets = dosCrlDP.getOctets();
-      ASN1InputStream oAsnInStream2 = new ASN1InputStream(new ByteArrayInputStream(crldpExtOctets));
+      oAsnInStream2 = new ASN1InputStream(new ByteArrayInputStream(crldpExtOctets));
       ASN1Primitive derObj2 = oAsnInStream2.readObject();
       CRLDistPoint distPoint = CRLDistPoint.getInstance(derObj2);
-
-      oAsnInStream2.close();
 
       List<String> crlUrls = new ArrayList<String>();
       for (DistributionPoint dp : distPoint.getDistributionPoints()) {
@@ -89,9 +98,11 @@ public class CrlDistributionPointResolver implements Execution {
       // System.out.println(url);
 
       return crlUrls.get(0);
-    } catch (Throwable e) {
-      e.printStackTrace();
-      return null;
+    } finally {
+      if (oAsnInStream != null)
+        oAsnInStream.close();
+      if (oAsnInStream2 != null)
+        oAsnInStream2.close();
     }
   }
 

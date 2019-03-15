@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.UnknownHostException;
 import java.security.cert.CRLException;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
@@ -34,18 +35,25 @@ public class CrlRevocationCheck implements Execution {
       messageContext.setVariable("custom.internal.crlDer", crl.getEncoded());
       messageContext.setVariable("custom.internal.crlDerSize", crl.getEncoded().length);
 
-      boolean res = isCertRevoked(certificate, crl);
-      messageContext.setVariable("custom.isCertificateRevoked", res);
+      boolean isCertRevoked = isCertRevoked(certificate, crl);
+      messageContext.setVariable("custom.isCertificateRevoked", isCertRevoked);
+      if (res) {
+        throw new BadRequestException("Certificate has been revoked");
+      }
 
       return ExecutionResult.SUCCESS;
+    } catch (BadRequestException bad) {
+      messageContext.setVariable("custom.error.message", bad.getMessage());
+      messageContext.setVariable("custom.error.statusCode", 400);
+      return ExecutionResult.ABORT;
     } catch (Exception e) {
-      messageContext.setVariable("custom.java.error", e.toString());
+      messageContext.setVariable("custom.internal.error.message", e.getMessage());
       return ExecutionResult.ABORT;
     }
   }
 
   protected static X509CRL getCrl(String crlUrl, byte[] crlDer)
-    throws MalformedURLException, IOException, CertificateException, CRLException {
+    throws IOException, CertificateException, CRLException, BadRequestException {
     if (crlDer == null) {
       return downloadCrl(crlUrl);
     } else {
@@ -61,18 +69,25 @@ public class CrlRevocationCheck implements Execution {
   }
 
   private static X509CRL downloadCrl(String crlUrl)
-      throws MalformedURLException, IOException, CertificateException, CRLException {
-    URL url = new URL(crlUrl);
-    URLConnection con = url.openConnection();
-    con.setConnectTimeout(1000);
-    con.setReadTimeout(2000);
-    InputStream crlStream = con.getInputStream();
+      throws IOException, CertificateException, CRLException, BadRequestException {
+
+    InputStream crlStream = null;
 
     try {
+      URL url = new URL(crlUrl);
+
+      URLConnection con = url.openConnection();
+      con.setConnectTimeout(1000);
+      con.setReadTimeout(2000);
+      crlStream = con.getInputStream();
+
       CertificateFactory cf = CertificateFactory.getInstance("X.509");
       return (X509CRL) cf.generateCRL(crlStream);
+    } catch (MalformedURLException | UnknownHostException e) {
+      throw new BadRequestException("Certificate CRL distribution point is invalid");
     } finally {
-      crlStream.close();
+      if (crlStream != null)
+        crlStream.close();
     }
   }
 

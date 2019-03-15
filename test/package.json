@@ -1,0 +1,11 @@
+{
+  "name": "test",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "./node_modules/.bin/cucumber-js features"
+  },
+  "dependencies": {
+    "apickli": "^2",
+    "cucumber": "^5"
+  }
+}

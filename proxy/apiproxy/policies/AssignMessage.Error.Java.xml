@@ -1,0 +1,8 @@
+<AssignMessage name="AssignMessage.Error.Java">
+
+  <AssignVariable>
+    <Name>custom.error.statusCode</Name>
+    <Value>400</Value>
+  </AssignVariable>
+
+</AssignMessage>

@@ -30,9 +30,11 @@ import org.bouncycastle.asn1.x509.GeneralNames;
 
 public class App
 {
-  private static String pemFilePath = "/home/ozanseymen/proj/poc/crl/node2/stackexchange.pem";
+  private static String pemFilePath = "../test/features/fixtures/";
 
   public static void main(String[] args) {
+    pemFilePath += args[0];
+
     try {
       String pem = new String(Files.readAllBytes(Paths.get(pemFilePath)));
       X509Certificate certificate = CrlDistributionPointResolver.pemToCertificate(pem);
@@ -44,10 +46,10 @@ public class App
       System.out.println("Number of revoked certificates in this CRL: " + crl.getRevokedCertificates().size());
 
       boolean res = CrlRevocationCheck.isCertRevoked(certificate, crl);
-      System.out.println("Is certificate revoked" + res);
+      System.out.println("Is certificate revoked: " + res);
 
     } catch (Exception e) {
-      System.out.println(e.getMessage());
+      e.printStackTrace();
     }
   }
 }
