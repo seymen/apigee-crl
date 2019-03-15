@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+  http://maven.apache.org/maven-v4_0_0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
   <groupId>apigee</groupId>
-  <artifactId>apigee-crl</artifactId>
+  <artifactId>crl-proxy</artifactId>
   <version>-</version>
   <name>crl</name>
   <packaging>pom</packaging>
@@ -17,7 +21,7 @@
     <apigee.apiversion>v1</apigee.apiversion>
     <apigee.username>trial@apigee.com</apigee.username>
     <apigee.password>Secret123</apigee.password>
-    <apigee.config.dir>./proxy/config</apigee.config.dir>
+    <apigee.config.dir>./crl-proxy/config</apigee.config.dir>
     <apigee.config.options>update</apigee.config.options>
   </properties>
 
@@ -36,8 +40,8 @@
   <dependencies>
     <dependency>
       <groupId>com.exco</groupId>
-      <artifactId>java</artifactId>
-      <version>1.0-SNAPSHOT</version>
+      <artifactId>crl-java</artifactId>
+      <version>1.0</version>
       <scope>compile</scope>
     </dependency>
   </dependencies>
@@ -64,7 +68,7 @@
         <plugin>
           <groupId>io.apigee.build-tools.enterprise4g</groupId>
           <artifactId>apigee-edge-maven-plugin</artifactId>
-          <version>1.0.0</version>
+          <version>1.1.7</version>
         </plugin>
       </plugins>
     </pluginManagement>
@@ -73,7 +77,7 @@
       <!-- copy the full apiproxy folder to target folder -->
       <plugin>
         <artifactId>maven-resources-plugin</artifactId>
-        <version>2.6</version>
+        <version>3.1.0</version>
         <executions>
           <execution>
             <id>copy-resources</id>
@@ -160,7 +164,7 @@
       <!-- cleaning dirs -->
       <plugin>
         <artifactId>maven-clean-plugin</artifactId>
-        <version>2.5</version>
+        <version>3.1.0</version>
         <executions>
           <execution>
             <id>auto-clean-init</id>
