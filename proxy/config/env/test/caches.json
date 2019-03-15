@@ -1,0 +1,10 @@
+[
+  {
+    "name": "CrlCache",
+    "expirySettings": {
+      "timeoutInSec": {
+        "value": "3600"
+      }
+    }
+  }
+]

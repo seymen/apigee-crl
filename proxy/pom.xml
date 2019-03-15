@@ -17,6 +17,8 @@
     <apigee.apiversion>v1</apigee.apiversion>
     <apigee.username>trial@apigee.com</apigee.username>
     <apigee.password>Secret123</apigee.password>
+    <apigee.config.dir>./proxy/config</apigee.config.dir>
+    <apigee.config.options>update</apigee.config.options>
   </properties>
 
   <profiles>
@@ -114,6 +116,21 @@
               <overWriteSnapshots>false</overWriteSnapshots>
               <overWriteIfNewer>true</overWriteIfNewer>
             </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>com.apigee.edge.config</groupId>
+        <artifactId>apigee-config-maven-plugin</artifactId>
+        <version>1.3.1</version>
+        <executions>
+          <execution>
+            <id>caches</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>caches</goal>
+            </goals>
           </execution>
         </executions>
       </plugin>

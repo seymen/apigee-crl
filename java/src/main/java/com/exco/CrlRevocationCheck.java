@@ -37,7 +37,7 @@ public class CrlRevocationCheck implements Execution {
 
       boolean isCertRevoked = isCertRevoked(certificate, crl);
       messageContext.setVariable("custom.isCertificateRevoked", isCertRevoked);
-      if (res) {
+      if (isCertRevoked) {
         throw new BadRequestException("Certificate has been revoked");
       }
 
