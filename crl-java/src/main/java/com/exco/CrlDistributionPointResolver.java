@@ -34,9 +34,7 @@ public class CrlDistributionPointResolver implements Execution {
       String pem = messageContext.getVariable("custom.tls.client.pem");
       X509Certificate certificate = Utils.pemToCertificate(pem);
       String crlDistributionPoint = getCrlDistributionPoint(certificate);
-
       messageContext.setVariable("custom.crlDistributionPoint", crlDistributionPoint);
-
       return ExecutionResult.SUCCESS;
     } catch (BadRequestException bad) {
       messageContext.setVariable("custom.error.message", bad.getMessage());
@@ -60,8 +58,6 @@ public class CrlDistributionPointResolver implements Execution {
       if (crlDistributionPointDerEncodedArray == null) {
         throw new BadRequestException("There are no CRL distribution points defined for this certificate");
       }
-
-      System.out.println("1: " + crlDistributionPointDerEncodedArray);
 
       oAsnInStream = new ASN1InputStream(new ByteArrayInputStream(crlDistributionPointDerEncodedArray));
       ASN1Primitive derObjCrlDP = oAsnInStream.readObject();
@@ -90,9 +86,6 @@ public class CrlDistributionPointResolver implements Execution {
         }
       }
 
-      // for (String url : crlUrls)
-      // System.out.println(url);
-
       return crlUrls.get(0);
     } finally {
       if (oAsnInStream != null)
@@ -101,5 +94,4 @@ public class CrlDistributionPointResolver implements Execution {
         oAsnInStream2.close();
     }
   }
-
 }
