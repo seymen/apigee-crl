@@ -37,7 +37,7 @@ public class App
 
     try {
       String pem = new String(Files.readAllBytes(Paths.get(pemFilePath)));
-      X509Certificate certificate = CrlDistributionPointResolver.pemToCertificate(pem);
+      X509Certificate certificate = Utils.pemToCertificate(pem);
 
       String crlDistributionPoint = CrlDistributionPointResolver.getCrlDistributionPoint(certificate);
       System.out.println("Crl distribution point: " + crlDistributionPoint);
@@ -49,7 +49,7 @@ public class App
       System.out.println("Is certificate revoked: " + res);
 
     } catch (Exception e) {
-      e.printStackTrace();
+      System.err.println(Utils.getStackTrace(e));
     }
   }
 }

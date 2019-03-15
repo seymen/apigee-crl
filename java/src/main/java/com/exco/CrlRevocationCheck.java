@@ -23,7 +23,7 @@ public class CrlRevocationCheck implements Execution {
   public ExecutionResult execute(MessageContext messageContext, ExecutionContext executionContext) {
     try {
       String pem = messageContext.getVariable("custom.tls.client.pem");
-      X509Certificate certificate = pemToCertificate(pem);
+      X509Certificate certificate = Utils.pemToCertificate(pem);
 
       messageContext.setVariable("custom.serialNumber", certificate.getSerialNumber().toString(16));
 
@@ -44,10 +44,10 @@ public class CrlRevocationCheck implements Execution {
       return ExecutionResult.SUCCESS;
     } catch (BadRequestException bad) {
       messageContext.setVariable("custom.error.message", bad.getMessage());
-      messageContext.setVariable("custom.error.statusCode", 400);
+      messageContext.setVariable("custom.error.internal", Utils.getStackTrace(bad));
       return ExecutionResult.ABORT;
     } catch (Exception e) {
-      messageContext.setVariable("custom.internal.error.message", e.getMessage());
+      messageContext.setVariable("custom.error.internal", Utils.getStackTrace(e));
       return ExecutionResult.ABORT;
     }
   }
@@ -93,11 +93,5 @@ public class CrlRevocationCheck implements Execution {
 
   protected static boolean isCertRevoked(X509Certificate certificate, X509CRL crl) throws CertificateException{
     return crl.isRevoked(certificate);
-  }
-
-  private static X509Certificate pemToCertificate(String pem) throws CertificateException {
-    CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
-    return (X509Certificate) certificateFactory
-          .generateCertificate(new ByteArrayInputStream(pem.getBytes()));
   }
 }

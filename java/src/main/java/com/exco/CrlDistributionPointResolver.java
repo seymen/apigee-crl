@@ -32,7 +32,7 @@ public class CrlDistributionPointResolver implements Execution {
   public ExecutionResult execute(MessageContext messageContext, ExecutionContext executionContext) {
     try {
       String pem = messageContext.getVariable("custom.tls.client.pem");
-      X509Certificate certificate = pemToCertificate(pem);
+      X509Certificate certificate = Utils.pemToCertificate(pem);
       String crlDistributionPoint = getCrlDistributionPoint(certificate);
 
       messageContext.setVariable("custom.crlDistributionPoint", crlDistributionPoint);
@@ -40,16 +40,12 @@ public class CrlDistributionPointResolver implements Execution {
       return ExecutionResult.SUCCESS;
     } catch (BadRequestException bad) {
       messageContext.setVariable("custom.error.message", bad.getMessage());
+      messageContext.setVariable("custom.error.internal", Utils.getStackTrace(bad));
       return ExecutionResult.ABORT;
     } catch (Exception e) {
-      messageContext.setVariable("custom.internal.error.message", e.getMessage());
+      messageContext.setVariable("custom.error.internal", Utils.getStackTrace(e));
       return ExecutionResult.ABORT;
     }
-  }
-
-  protected static X509Certificate pemToCertificate(String pem) throws CertificateException {
-    CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
-    return (X509Certificate) certificateFactory.generateCertificate(new ByteArrayInputStream(pem.getBytes()));
   }
 
   protected static String getCrlDistributionPoint(X509Certificate certificate)

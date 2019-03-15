@@ -5,7 +5,7 @@ Feature: CRL implementation with Apigee
     When I GET /crl
     Then response code should be 200
     And response body path $.crlDistributionPoint should be http://crl3.digicert.com/ssca-sha2-g5.crl
-    And response body path $.numberOfRevokedCertificates should be 18132
+    And response body path $.numberOfRevokedCertificates should be \d+
     And response body path $.serialNumber should be 1f202031dfda98efdff0f72be51060d
     And response body path $.isCertificateRevoked should be false
 
