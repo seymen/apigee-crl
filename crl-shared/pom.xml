@@ -7,9 +7,9 @@
 
   <modelVersion>4.0.0</modelVersion>
   <groupId>apigee</groupId>
-  <artifactId>crl-proxy</artifactId>
+  <artifactId>crl-shared</artifactId>
   <version>-</version>
-  <name>crl-proxy</name>
+  <name>crl-shared</name>
   <packaging>pom</packaging>
 
   <properties>
@@ -20,8 +20,9 @@
     <target.root.dir>${basedir}/target</target.root.dir>
 
     <apigee.apiversion>v1</apigee.apiversion>
-    <apigee.config.dir>./crl-proxy/config</apigee.config.dir>
+    <apigee.config.dir>./crl-shared/config</apigee.config.dir>
     <apigee.config.options>update</apigee.config.options>
+    <apigee.apitype>sharedflow</apigee.apitype>
 
     <!-- Modify the following properties based on your Apigee instance -->
     <apigee.hosturl>http://localhost:8080</apigee.hosturl>
@@ -34,8 +35,8 @@
       <id>test</id>
       <properties>
         <apigee.profile>test</apigee.profile>
-        <apigee.env>test</apigee.env>
         <apigee.org>trial</apigee.org> <!-- modify based on your Apigee instance -->
+        <apigee.env>test</apigee.env>
         <apigee.options>update</apigee.options>
       </properties>
     </profile>
@@ -55,6 +56,15 @@
       </releases>
     </pluginRepository>
   </pluginRepositories>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.exco</groupId>
+      <artifactId>crl-java</artifactId>
+      <version>1.0</version>
+      <scope>compile</scope>
+    </dependency>
+  </dependencies>
 
   <build>
 
@@ -88,13 +98,48 @@
                   <directory>${project.root.dir}</directory>
                   <filtering>true</filtering>
                   <includes>
-                    <include>apiproxy/**</include>
+                    <include>sharedflowbundle/**</include>
                   </includes>
                 </resource>
               </resources>
               <!--target -->
               <outputDirectory>${target.root.dir}</outputDirectory>
             </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>copy-dependencies</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>copy-dependencies</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${target.root.dir}/sharedflowbundle/resources/java</outputDirectory>
+              <overWriteReleases>false</overWriteReleases>
+              <overWriteSnapshots>false</overWriteSnapshots>
+              <overWriteIfNewer>true</overWriteIfNewer>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>com.apigee.edge.config</groupId>
+        <artifactId>apigee-config-maven-plugin</artifactId>
+        <version>1.3.1</version>
+        <executions>
+          <execution>
+            <id>caches</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>caches</goal>
+            </goals>
           </execution>
         </executions>
       </plugin>
@@ -143,6 +188,5 @@
         </executions>
       </plugin>
     </plugins>
-
   </build>
 </project>

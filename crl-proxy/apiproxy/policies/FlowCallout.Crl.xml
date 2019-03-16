@@ -1,3 +1,3 @@
 <FlowCallout name="FlowCallout.Crl">
-  <SharedFlowBundle>crl</SharedFlowBundle>
+  <SharedFlowBundle>crl-shared</SharedFlowBundle>
 </FlowCallout>

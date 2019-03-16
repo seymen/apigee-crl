@@ -7,13 +7,14 @@
 
   <modelVersion>4.0.0</modelVersion>
   <groupId>apigee</groupId>
-  <artifactId>apigee-crl-project</artifactId>
+  <artifactId>crl-parent</artifactId>
   <packaging>pom</packaging>
   <version>1.0</version>
-  <name>CRL Revocation Check in Apigee</name>
+  <name>crl-parent</name>
 
   <modules>
     <module>crl-java</module>
+    <module>crl-shared</module>
     <module>crl-proxy</module>
   </modules>
 
