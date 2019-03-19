@@ -8,6 +8,7 @@
   "crlDistributionPoint": "{custom.crlDistributionPoint}",
   "numberOfRevokedCertificates": {custom.numberOfRevokedCertificates},
   "serialNumber": "{custom.serialNumber}",
+  "crlSource": "{custom.internal.crlSource}",
   "isCertificateRevoked": {custom.isCertificateRevoked}
 }
     </Payload>

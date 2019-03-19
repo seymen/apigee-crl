@@ -1,12 +1,32 @@
 Feature: CRL implementation with Apigee
 
-  Scenario: Valid certificate with CRL distribution point
-    Given I pipe contents of file valid.crt to body
+  Scenario: Valid non-cachable certificate with CRL distribution point
+    Given I pipe contents of file valid-not-cachable.crt to body
     When I GET /crl
     Then response code should be 200
     And response body path $.crlDistributionPoint should be http://crl3.digicert.com/ssca-sha2-g5.crl
     And response body path $.numberOfRevokedCertificates should be \d+
     And response body path $.serialNumber should be 1f202031dfda98efdff0f72be51060d
+    And response body path $.crlSource should be download
+    And response body path $.isCertificateRevoked should be false
+
+  Scenario: Valid cachable certificate with CRL distribution point - Request 1
+    Given I pipe contents of file valid-cachable.crt to body
+    When I GET /crl
+    Then response code should be 200
+    And response body path $.crlDistributionPoint should be http://crl3.digicert.com/sha2-ha-server-g6.crl
+    And response body path $.numberOfRevokedCertificates should be \d+
+    And response body path $.serialNumber should be 765c64e74e591d68039ca2a847563f0
+    And response body path $.isCertificateRevoked should be false
+
+  Scenario: Valid cachable certificate with CRL distribution point - Request 2
+    Given I pipe contents of file valid-cachable.crt to body
+    When I GET /crl
+    Then response code should be 200
+    And response body path $.crlDistributionPoint should be http://crl3.digicert.com/sha2-ha-server-g6.crl
+    And response body path $.numberOfRevokedCertificates should be \d+
+    And response body path $.serialNumber should be 765c64e74e591d68039ca2a847563f0
+    And response body path $.crlSource should be cache
     And response body path $.isCertificateRevoked should be false
 
   Scenario: Revoked certificate

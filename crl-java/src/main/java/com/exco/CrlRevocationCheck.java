@@ -22,19 +22,29 @@ public class CrlRevocationCheck implements Execution {
 
   public ExecutionResult execute(MessageContext messageContext, ExecutionContext executionContext) {
     try {
+      // load the incoming cert in PEM format and read standard attributes
       String pem = messageContext.getVariable("custom.tls.client.pem");
       X509Certificate certificate = Utils.pemToCertificate(pem);
-
       messageContext.setVariable("custom.serialNumber", certificate.getSerialNumber().toString(16));
 
+      // read the CRL distribution point extracted in previous java callout
       String crlDistributionPoint = messageContext.getVariable("custom.crlDistributionPoint");
-      byte[] crlDer = messageContext.getVariable("custom.internal.crlDerFromCache");
 
+      // read the CRL binary from cache if it has been cached in previous requests
+      byte[] crlDer = messageContext.getVariable("custom.internal.crlDerFromCache");
+      if (crlDer != null) {
+        messageContext.setVariable("custom.internal.crlSource", "cache");
+      } else {
+        messageContext.setVariable("custom.internal.crlSource", "download");
+      }
+
+      // load the CRL binary into an instance of X509CRL class
       X509CRL crl = getCrl(crlDistributionPoint, crlDer);
       messageContext.setVariable("custom.numberOfRevokedCertificates", crl.getRevokedCertificates().size());
       messageContext.setVariable("custom.internal.crlDer", crl.getEncoded());
       messageContext.setVariable("custom.internal.crlDerSize", crl.getEncoded().length);
 
+      // check revocation
       boolean isCertRevoked = isCertRevoked(certificate, crl);
       messageContext.setVariable("custom.isCertificateRevoked", isCertRevoked);
       if (isCertRevoked) {
@@ -83,7 +93,7 @@ public class CrlRevocationCheck implements Execution {
 
       CertificateFactory cf = CertificateFactory.getInstance("X.509");
       return (X509CRL) cf.generateCRL(crlStream);
-    } catch (MalformedURLException | UnknownHostException e) {
+    } catch (MalformedURLException | UnknownHostException | CRLException e) {
       throw new BadRequestException("Certificate CRL distribution point is invalid");
     } finally {
       if (crlStream != null)
