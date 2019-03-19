@@ -24,8 +24,7 @@
     <apigee.config.options>update</apigee.config.options>
     <apigee.apitype>sharedflow</apigee.apitype>
 
-    <!-- Modify the following properties based on your Apigee instance -->
-    <apigee.hosturl>http://localhost:8080</apigee.hosturl>
+    <apigee.hosturl>https://api.enterprise.apigee.com</apigee.hosturl>
     <apigee.username>${username}</apigee.username>
     <apigee.password>${password}</apigee.password>
   </properties>
@@ -35,7 +34,7 @@
       <id>test</id>
       <properties>
         <apigee.profile>test</apigee.profile>
-        <apigee.org>trial</apigee.org> <!-- modify based on your Apigee instance -->
+        <apigee.org>trial</apigee.org>
         <apigee.env>test</apigee.env>
         <apigee.options>update</apigee.options>
       </properties>

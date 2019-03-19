@@ -23,8 +23,7 @@
     <apigee.config.dir>./crl-proxy/config</apigee.config.dir>
     <apigee.config.options>update</apigee.config.options>
 
-    <!-- Modify the following properties based on your Apigee instance -->
-    <apigee.hosturl>http://localhost:8080</apigee.hosturl>
+    <apigee.hosturl>https://api.enterprise.apigee.com</apigee.hosturl>
     <apigee.username>${username}</apigee.username>
     <apigee.password>${password}</apigee.password>
   </properties>
@@ -34,8 +33,8 @@
       <id>test</id>
       <properties>
         <apigee.profile>test</apigee.profile>
+        <apigee.org>trial</apigee.org>
         <apigee.env>test</apigee.env>
-        <apigee.org>trial</apigee.org> <!-- modify based on your Apigee instance -->
         <apigee.options>update</apigee.options>
       </properties>
     </profile>
