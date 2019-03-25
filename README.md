@@ -92,3 +92,13 @@ Tests can be executed as follows:
     ```
     npm test
     ```
+
+## Disclaimer
+
+This example is not an official Google product, nor is it part of an official Google product.
+
+This is a community supported project and it comes with no warranty.
+
+## Contributing
+
+If you have any comments or suggestions, feel free to raise [an issue](https://github.com/seymen/apigee-crl/issues) or fork the repo and issue a pull request with suggested improvements.
